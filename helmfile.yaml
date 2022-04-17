@@ -1,0 +1,29 @@
+# Chart repositories used from within this state file
+#
+# Use `helm-s3` and `helm-git` and whatever Helm Downloader plugins
+# to use repositories other than the official repository or one backend by chartmuseum.
+repositories:
+# Advanced configuration: You can setup basic or tls auth and optionally enable helm OCI integration
+- name: acr
+  url: {{ requiredEnv "MYOCIREGISTRY_URL" | quote}}
+  # certFile: optional_client_cert
+  # keyFile: optional_client_key
+  username: {{ requiredEnv "MYOCIREGISTRY_USERNAME" | quote }}
+  password: {{ requiredEnv "MYOCIREGISTRY_PASSWORD" | quote }}
+  oci: true
+  passCredentials: true
+
+#helmBinary: path/to/helm3
+
+
+# The desired states of Helm releases.
+#
+# Helmfile runs various helm commands to converge the current state in the live cluster to the desired state defined here.
+releases:
+
+  # Local chart example
+  - name: chart-a                            # name of this release
+    namespace: another                       # target namespace
+    chart: charts/chart-a             # the chart being installed to create this release, referenced by relative path to local helmfile
+    wait: true
+
